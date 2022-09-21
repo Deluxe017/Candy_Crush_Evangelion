@@ -15,7 +15,8 @@ public class Board : MonoBehaviour
     public GameObject[] prePiezas;
     public Tile InicialsTile;
     public Tile FinalizarTile;
-    [Range(0f, .5f)] public float swapTime = 3f;
+    [Range(0f, .5f)] 
+    public float swapTime = .3f;
     public bool puedeMoverse = true;
     public GamePieza[,] gamePieza;
     public AudioSource Source;
@@ -201,7 +202,8 @@ public class Board : MonoBehaviour
                     foreach (GamePieza pieza in CoinPiezaInicial)
                     {
                         pieza.GetComponentInChildren<Animator>().SetBool("Explosion", true);
-                    }   
+                    }
+                    
                     yield return new WaitForSeconds(0.5f);
                     AudioSource.PlayClipAtPoint(destroyAudio, gameObject.transform.position);
                     ClearAndRefillBoard(CoinPiezaInicial);
