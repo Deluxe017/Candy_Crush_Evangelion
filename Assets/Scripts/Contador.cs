@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEditor.SceneManagement;
 
 public class Contador : MonoBehaviour
 {
@@ -28,7 +30,7 @@ public class Contador : MonoBehaviour
             }
 
             int tempMin = Mathf.FloorToInt(restantes / 60);
-            int tempSegundos = Mathf.FloorToInt(segundos % 60);
+            int tempSegundos = Mathf.FloorToInt(restantes % 60);
 
             tiempo.text = string.Format("{00:00} : {01:00}", tempMin, tempSegundos);
         }

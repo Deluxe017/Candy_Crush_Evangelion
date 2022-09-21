@@ -30,4 +30,9 @@ public class Escena : MonoBehaviour
     {
         SceneManager.LoadScene("Menu");
     }
+
+    public void Niveles()
+    {
+        SceneManager.LoadScene("Niveles");
+    }
 }
