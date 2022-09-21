@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de83006e3ade8e649b3f97dfc61e082f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minutos: 5
+  minutos: 1
   segundos: 0
   tiempo: {fileID: 197506362}
   enMarcha: 1

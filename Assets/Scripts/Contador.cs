@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 public class Contador : MonoBehaviour
 {
@@ -26,7 +26,7 @@ public class Contador : MonoBehaviour
 
             if(restantes < 1)
             {
-                //Cambiar escena a perder
+                SceneManager.LoadScene("Game Over");
             }
 
             int tempMin = Mathf.FloorToInt(restantes / 60);
