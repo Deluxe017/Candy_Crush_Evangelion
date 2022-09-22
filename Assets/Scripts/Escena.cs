@@ -35,4 +35,29 @@ public class Escena : MonoBehaviour
     {
         SceneManager.LoadScene("Niveles");
     }
+
+    public void Nivel1()
+    {
+        SceneManager.LoadScene("Nivel1");
+    }
+
+    public void Nivel2()
+    {
+        SceneManager.LoadScene("Nivel2");
+    }
+    
+    public void Nivel3()
+    {
+        SceneManager.LoadScene("Nivel3");
+    }
+
+    public void Nivel4()
+    {
+        SceneManager.LoadScene("Nivel4");
+    }
+
+    public void Nivel5()
+    {
+        SceneManager.LoadScene("Nivel5");
+    }
 }

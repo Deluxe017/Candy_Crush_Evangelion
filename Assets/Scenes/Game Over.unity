@@ -598,7 +598,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1537199911}
         m_TargetAssemblyTypeName: Escena, Assembly-CSharp
-        m_MethodName: Juego
+        m_MethodName: Niveles
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
