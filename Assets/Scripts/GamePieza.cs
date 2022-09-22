@@ -22,12 +22,6 @@ public class GamePieza : MonoBehaviour
     public TipoFicha tipoFicha;
 
 
-
-    private void Start()
-    {
-        
-    }
-
     private void Update()
     {
        /* if( Mathf.Abs(coordenadaX -transform.position.x) > .1f)

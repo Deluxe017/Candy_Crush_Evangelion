@@ -16,6 +16,7 @@ public class Tile : MonoBehaviour
     {
         indiceX = x;
         indiceY = y;
+
     }
 
     public void OnMouseDown()
