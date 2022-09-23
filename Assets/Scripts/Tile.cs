@@ -4,34 +4,33 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public int indiceX;
-    public int indiceY;
+    public int xIndex;
+    public int yIndex;
 
-    public Board m_board;
-    public AudioSource Source;
-    public AudioClip audioFX;
-    public GameObject[] pref;
-    
-    public void Iniciador(int x, int y, Board board)
+    Board m_board;
+
+
+    public void Init(int cambioX, int cambioY, Board board)
     {
-        indiceX = x;
-        indiceY = y;
+        xIndex = cambioX;
+        yIndex = cambioY;
+
         m_board = board;
     }
 
     public void OnMouseDown()
     {
-        m_board.InicialTile(this);
+        m_board.ClickedTile(this);
     }
 
     public void OnMouseEnter()
     {
-        m_board.FinalTile(this);
+        m_board.DragToTile(this);
     }
 
     public void OnMouseUp()
     {
-        m_board.RelaseTile();
-        AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
+        m_board.ReleaseTile();
     }
+
 }

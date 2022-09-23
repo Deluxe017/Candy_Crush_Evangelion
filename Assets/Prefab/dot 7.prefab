@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4803647580929341940}
   - component: {fileID: 2634736539862788505}
-  - component: {fileID: -6951990012933849859}
+  - component: {fileID: 4140881819836695764}
   - component: {fileID: -4799521393822343519}
   m_Layer: 0
   m_Name: dot 7
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-6951990012933849859
+--- !u!114 &4140881819836695764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,38 +98,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744d07db9344000429bd4b5f74887cf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coordenadaX: 0
-  coordenadaY: 0
-  t: 0
-  tiempoMovi: 0.2
-  enMovimiento: 1
-  tipoDeInterpolacion: 0
-  curve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 1
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  boar_D: {fileID: 0}
-  tipoFicha: 1
+  xIndex: 0
+  yIndex: 0
+  tipoDeInterpolo: 0
+  tipoFicha: 2
 --- !u!95 &-4799521393822343519
 Animator:
   serializedVersion: 4
