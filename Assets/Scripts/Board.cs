@@ -22,6 +22,11 @@ public class Board : MonoBehaviour
     public Tile InicialsTile;
     public Tile FinalizarTile;
 
+    Transform tileParent;
+    Transform gamePieceParent;
+
+    bool m_playerInputEnable = true;
+
     [Range(0f, .5f)]
 
     public GameObject[] prefpuntos;
@@ -35,6 +40,8 @@ public class Board : MonoBehaviour
 
     void Start()
     {
+        SetParents();
+
         gamePieza = new GamePieza[anchoF, altoC];
 
         CreateBoard();
@@ -43,6 +50,23 @@ public class Board : MonoBehaviour
         LLenarMatriz();
       
     }
+
+    private void SetParents()
+    {
+        if (tileParent == null)
+        {
+            tileParent = new GameObject().transform;
+            tileParent.name = "Tiles";
+            tileParent.parent = this.transform;
+        }
+        if(gamePieceParent == null)
+        {
+            gamePieceParent = new GameObject().transform;
+            gamePieceParent.name = "GamePieces";
+            gamePieceParent = this.transform;
+        }
+    }
+
     void CreateBoard()
     {
         board = new Tile[anchoF, altoC];
@@ -58,13 +82,9 @@ public class Board : MonoBehaviour
                 go.transform.parent = transform;
 
                 Tile tile = go.GetComponent<Tile>();
-                tile.board = this;
+                tile.m_board = this;
                 board[x, y] = tile;
-                tile.Iniciador(x, y);
-
-                //board[ancho, alto]
-                //board[x,y]
-                    
+                tile.Iniciador(x, y, this);     
             }
         }
     }
@@ -88,23 +108,12 @@ public class Board : MonoBehaviour
 
     }
 
-    GameObject PiezaAleatoria()
-    {
 
-        int numAleatorio = Random.Range(0, prePiezas.Length);
-        GameObject go = Instantiate(prePiezas[numAleatorio]);
-
-        go.GetComponent<GamePieza>().boar_D = this;
-
-        return go;
-
-
-    }
 
      public void PiezaPosition(GamePieza go, int x, int y)
     {
         go.transform.position = new Vector3(x, y, 0f);
-        go.PiezaIniciada(x, y);
+        go.Coordenadas(x, y);
         gamePieza[x, y] = go;
             
     }
@@ -217,8 +226,8 @@ public class Board : MonoBehaviour
 
             if (gpInicial != null && gpFinalizar != null)
             {
-                gpInicial.MovePieza(gpEnd.indiceX, gpEnd.indiceY, swapTime);
-                gpFinalizar.MovePieza(gpStart.indiceX, gpStart.indiceY, swapTime);
+                gpInicial.MoverPieza(gpEnd.indiceX, gpEnd.indiceY, swapTime);
+                gpFinalizar.MoverPieza(gpStart.indiceX, gpStart.indiceY, swapTime);
 
                 yield return new WaitForSeconds(swapTime);
 
@@ -228,8 +237,8 @@ public class Board : MonoBehaviour
 
                 if (CoinPiezaInicial.Count == 0 && CoinPiezaFinal.Count == 0)
                 {
-                    gpInicial.MovePieza(gpStart.indiceX, gpStart.indiceY, swapTime);
-                    gpFinalizar.MovePieza(gpEnd.indiceX, gpEnd.indiceY, swapTime);
+                    gpInicial.MoverPieza(gpStart.indiceX, gpStart.indiceY, swapTime);
+                    gpFinalizar.MoverPieza(gpEnd.indiceX, gpEnd.indiceY, swapTime);
                     yield return new WaitForSeconds(swapTime);
                     puedeMoverse = true;
                 }
@@ -449,6 +458,17 @@ public class Board : MonoBehaviour
             }
         }
     }
+
+    void HighlightPieces(List<GamePieza> gamePiezas)
+    {
+        foreach (GamePieza piece in gamePiezas)
+        {
+            if(piece != null)
+            {
+                ResaltarTile(piece.coordenadaX, piece.coordenadaY, piece.GetComponent<SpriteRenderer>().color);
+            }
+        }
+    }
     private void ClearPiezas(int x__, int Y__)
     {
         GamePieza pieceToClear = gamePieza[x__, Y__];
@@ -459,6 +479,7 @@ public class Board : MonoBehaviour
             Destroy(pieceToClear.gameObject);
             AudioSource.PlayClipAtPoint(destroyAudio, gameObject.transform.position);
         }
+        ResaltarTile(x__, Y__, Color.red);
     }
     void ClearBoarD()
     {
@@ -470,21 +491,71 @@ public class Board : MonoBehaviour
             }
         }
     }
-
-
-    ////////////
-   
-
-
-
-    private void ReemplazarConPiezaAleatoria(List<GamePieza> matches, int falseOffset = 0, float moveTime = .1f)
+    GameObject PiezaAleatoria()
     {
-        foreach (GamePieza gamePieces in coincidencias)
+        int numAleatorio = Random.Range(0, prePiezas.Length);
+
+        return prePiezas[numAleatorio];
+    }
+
+    public void PlaceGamePiece(GamePieza gamePiece, int x, int y)
+    {
+        if(gamePiece == null)
         {
-            ClearPiezas(gamePieces.coordenadaX, gamePieces.coordenadaY);
-            LlenarMAleatoria(gamePieces.coordenadaX, gamePieces.coordenadaY);
+            Debug.LogWarning($"gamePiece inválida");
+            return;
+        }
+
+        gamePiece.transform.position = new Vector2(x, y);
+        gamePiece.transform.rotation = Quaternion.identity;
+
+        if(EstaEnRango(x, y))
+        {
+            gamePieza[x,y] = gamePiece;
+        }
+        gamePiece.Coordenadas(x, y);
+    }
+
+    private bool IsWithBounds(int x, int y)
+    {
+        return (x >= 0 && x < anchoF && y >= 0 && y < altoC);
+    }
+
+    GamePieza ReemplazarConPiezaAleatoria(int x, int y, int falseOffset = 0, float moveTime = .1f)
+    {
+        GamePieza randomPiece = Instantiate(PiezaAleatoria(), Vector2.zero, Quaternion.identity).GetComponent<GamePieza>();
+        if(randomPiece != null)
+        {
+            randomPiece.Init(this);
+            PlaceGamePiece(randomPiece, x, y);
+
+            if(falseOffset != 0)
+            {
+                randomPiece.transform.position = new Vector2(x, y + falseOffset);
+                randomPiece.MoverPieza(x, y, moveTime);
+            }
+            randomPiece.transform.parent = gamePieceParent;
+        }
+        return randomPiece;
+    }
+
+    void ReplaceWithRandom(List<GamePieza> gamePiezas, int falseOffset = 0, float moveTime = .1f)
+    {
+        foreach(GamePieza piece in gamePiezas)
+        {
+            ClearPiezas(piece.coordenadaX, piece.coordenadaY);
+            if(falseOffset == 0)
+            {
+                EncontrarCoincidenciasEn(piece.coordenadaX, piece.coordenadaY);
+            }
+            else
+            {
+                EncontrarCoincidenciasEn(piece.coordenadaX, piece.coordenadaY, falseOffset, moveTime);
+            }
         }
     }
+
+    
 
     GamePieza LlenarMAleatoria(int x, int y, int falseOffset = 0, float moveTime = .1f)
     {
@@ -511,7 +582,7 @@ public class Board : MonoBehaviour
                 {
                     if (gamePieza[colum, j] != null)
                     {
-                        gamePieza[colum, j].MovePieza(colum, i, collapseTime * (j-i));
+                        gamePieza[colum, j].MoverPieza(colum, i, collapseTime * (j-i));
                         gamePieza[colum, i] = gamePieza[colum, j];
                         gamePieza[colum, j].PiezaIniciada(colum, i);
 
@@ -557,7 +628,14 @@ public class Board : MonoBehaviour
         return columsIndex;
     }
 
-    
+    List<GamePieza> CollapseColumn(int column, float collapseTime = .1f)
+    {
+        List<GamePieza> movingPieces = new List<GamePieza>();
+        for (int i = 0; i < altoC - 1; i++)
+        {
+            if () ;
+        }
+    }
 
     IEnumerator ClearAndRefillBoardRoutine(List<GamePieza>gamePiezas)
     {

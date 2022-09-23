@@ -7,31 +7,31 @@ public class Tile : MonoBehaviour
     public int indiceX;
     public int indiceY;
 
-    public Board board;
+    public Board m_board;
     public AudioSource Source;
     public AudioClip audioFX;
     public GameObject[] pref;
     
-    public void Iniciador(int x, int y)
+    public void Iniciador(int x, int y, Board board)
     {
         indiceX = x;
         indiceY = y;
-
+        m_board = board;
     }
 
     public void OnMouseDown()
     {
-        board.InicialTile(this);
+        m_board.InicialTile(this);
     }
 
     public void OnMouseEnter()
     {
-        board.FinalTile(this);
+        m_board.FinalTile(this);
     }
 
     public void OnMouseUp()
     {
-        board.RelaseTile();
+        m_board.RelaseTile();
         AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
     }
 }
