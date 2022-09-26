@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   minutos: 5
-  segundos: 30
+  segundos: 0
   tiempo: {fileID: 197506362}
   enMarcha: 1
 --- !u!114 &197506362
@@ -872,7 +872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -170.99995, y: 0}
+  m_AnchoredPosition: {x: -170.99994, y: 0}
   m_SizeDelta: {x: 1092.87, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1715755464
