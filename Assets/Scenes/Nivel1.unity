@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de83006e3ade8e649b3f97dfc61e082f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minutos: 0
+  minutos: 5
   segundos: 30
   tiempo: {fileID: 197506362}
   enMarcha: 1
@@ -753,6 +753,7 @@ MonoBehaviour:
   m_puntaje: {fileID: 711333280}
   piezaInicial: {fileID: 0}
   piezaFinal: {fileID: 0}
+  movimientoMaximo: 0
 --- !u!4 &1338248520
 Transform:
   m_ObjectHideFlags: 0
@@ -871,7 +872,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -170.99994, y: 0}
+  m_AnchoredPosition: {x: -170.99995, y: 0}
   m_SizeDelta: {x: 1092.87, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1715755464

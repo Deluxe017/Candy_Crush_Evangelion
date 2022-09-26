@@ -60,4 +60,9 @@ public class Escena : MonoBehaviour
     {
         SceneManager.LoadScene("Nivel5");
     }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene("Game Over");
+    }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class Board : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class Board : MonoBehaviour
     public GameObject[] gamePiecesPrefabs;
 
     public float swapTime = .3f;
+
+    Escena escena_;
 
     public Puntaje m_puntaje;
 
@@ -29,6 +32,8 @@ public class Board : MonoBehaviour
     Transform gamePieceParent;
 
     int myCount = 0;
+
+    public int movimientoMaximo; 
 
     private void Start()
     {
@@ -220,7 +225,13 @@ public class Board : MonoBehaviour
                 }
 
 
+
             }
+        }
+
+        if (movimientoMaximo == 0)
+        {
+            
         }
     }
 

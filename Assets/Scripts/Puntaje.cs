@@ -29,5 +29,12 @@ public class Puntaje : MonoBehaviour
     public void SumatoriaPuntos(int puntosEntrada)
     {
         puntos += puntosEntrada;
+
+        if(puntos >= 100)
+        {
+            SceneManager.LoadScene("Win");
+        }
     }
+
+    
 }
