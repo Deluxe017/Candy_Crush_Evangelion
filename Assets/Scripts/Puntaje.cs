@@ -30,11 +30,27 @@ public class Puntaje : MonoBehaviour
     {
         puntos += puntosEntrada;
 
-        if(puntos >= 100)
+        if (puntos > 300 && puntos <= 350)
+        {
+            SceneManager.LoadScene("Nivel2");
+        }
+        if (puntos > 400 && puntos <= 450)
+        {
+            SceneManager.LoadScene("Nivel3");
+        }
+        if (puntos > 500 && puntos <= 550)
+        {
+            SceneManager.LoadScene("Nivel4");
+        }
+        if (puntos > 600 && puntos <= 650)
+        {
+            SceneManager.LoadScene("Nivel5");
+        }
+        if (puntos > 700 && puntos <= 750)
         {
             SceneManager.LoadScene("Win");
         }
     }
+ 
 
-    
 }
