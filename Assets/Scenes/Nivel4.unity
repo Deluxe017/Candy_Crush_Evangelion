@@ -177,6 +177,7 @@ MonoBehaviour:
   minutos: 5
   segundos: 0
   tiempo: {fileID: 197506362}
+  restantes: 0
   enMarcha: 1
 --- !u!114 &197506362
 MonoBehaviour:
@@ -372,7 +373,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 29f55cf9656646c41a6d1a9b36053437, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.38
+  m_Volume: 0.05
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -604,6 +605,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e45af6e38f6cc594a96d5d90d5429f40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movimientosNecesarios: 0
+  goalScore: 0
+  tiempo: {fileID: 0}
+  _winCondition: 0
 --- !u!1 &1003890585
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +759,8 @@ MonoBehaviour:
   piezaInicial: {fileID: 0}
   piezaFinal: {fileID: 0}
   movimientoMaximo: 0
+  musica: {fileID: 8300000, guid: e09016e70d30844499f67aa3db42f899, type: 3}
+  audioFX: {fileID: 8300000, guid: a1ec1b9d493e4d5468f68fd11c6e4f51, type: 3}
 --- !u!4 &1338248520
 Transform:
   m_ObjectHideFlags: 0

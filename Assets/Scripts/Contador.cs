@@ -10,7 +10,7 @@ public class Contador : MonoBehaviour
     public int minutos;
     public int segundos;
     public TMP_Text tiempo;
-    private float restantes;
+    public float restantes;
     public bool enMarcha;
 
     private void Awake()

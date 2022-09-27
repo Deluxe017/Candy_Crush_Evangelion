@@ -33,7 +33,10 @@ public class Board : MonoBehaviour
 
     int myCount = 0;
 
-    public int movimientoMaximo; 
+    public int movimientoMaximo;
+
+    public AudioClip musica;
+    public AudioClip audioFX;
 
     private void Start()
     {
@@ -203,6 +206,7 @@ public class Board : MonoBehaviour
 
             if (clickedPiece != null && targetPiece != null)
             {
+
                 clickedPiece.Move(targetTile.xIndex, targetTile.yIndex, swapTime);
                 targetPiece.Move(clickedPiece.xIndex, clickedPiece.yIndex, swapTime);
 
@@ -211,10 +215,12 @@ public class Board : MonoBehaviour
                 List<GamePiece> clickedPieceMatches = FindMatchesAt(clickedTile.xIndex, clickedTile.yIndex);
                 List<GamePiece> targetPieceMatches = FindMatchesAt(targetTile.xIndex, targetTile.yIndex);
 
+                
+
                 if (clickedPieceMatches.Count == 0 && targetPieceMatches.Count == 0)
                 {
                     clickedPiece.Move(clickedTile.xIndex, clickedTile.yIndex, swapTime);
-                    targetPiece.Move(targetTile.xIndex, targetTile.yIndex, swapTime);
+                    targetPiece.Move(targetTile.xIndex, targetTile.yIndex, swapTime);                  
 
                     yield return new WaitForSeconds(swapTime);
 
@@ -222,6 +228,7 @@ public class Board : MonoBehaviour
                 else
                 {
                     CleatAndRefillBoard(clickedPieceMatches.Union(targetPieceMatches).ToList());
+                    AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
                 }
 
 
@@ -229,11 +236,10 @@ public class Board : MonoBehaviour
             }
         }
 
-        if (movimientoMaximo == 0)
-        {
-            
-        }
+
+
     }
+
 
     private void CleatAndRefillBoard(List<GamePiece> gamePieces)
     {
@@ -350,17 +356,63 @@ public class Board : MonoBehaviour
         if (horizontalMatches == null)
         {
             horizontalMatches = new List<GamePiece>();
+            Figure(x, y, minLenght);
+           
+        }
+        if (verticalMatches == null)
+        {
+            verticalMatches = new List<GamePiece>();
+            Figure(x, y, minLenght);
+        }
+        if(horizontalMatches.Count != 0 && verticalMatches.Count != 0)
+        {
+            int cantidadPuntos = 1000;
+
+            m_puntaje.SumatoriaPuntos(cantidadPuntos);
+            Debug.Log("Figura");
+        }
+
+        var combinedMatches = horizontalMatches.Union(verticalMatches).ToList();
+        
+
+        return combinedMatches;
+    }
+
+    public bool Figure(int x, int y, int minLenght = 3)
+    {
+        List<GamePiece> horizontalMatches = FindHorizontalMatches(x, y, minLenght);
+        List<GamePiece> verticalMatches = FindVerticalMatches(x, y, minLenght);
+
+        if (horizontalMatches == null)
+        {
+            horizontalMatches = new List<GamePiece>();
         }
         if (verticalMatches == null)
         {
             verticalMatches = new List<GamePiece>();
         }
+        if (horizontalMatches.Count == 0 && verticalMatches.Count != 0)
+        {
+            return false;
+        }
+        if(horizontalMatches.Count != 0 && verticalMatches.Count == 0)
+        {
 
-        var combinedMatches = horizontalMatches.Union(verticalMatches).ToList();
-        return combinedMatches;
+            return false;
+        }
+        if (horizontalMatches.Count != 0 && verticalMatches.Count != 0)
+        {
+            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    List<GamePiece> FindMatchesAt(List<GamePiece> gamePieces, int minLenght = 3)
+
+        List<GamePiece> FindMatchesAt(List<GamePiece> gamePieces, int minLenght = 3)
     {
         List<GamePiece> matches = new List<GamePiece>();
 
@@ -708,6 +760,8 @@ public class Board : MonoBehaviour
             {
                 yield return null;
             }
+
+            AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
 
             yield return new WaitForSeconds(.5f);
 

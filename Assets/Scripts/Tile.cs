@@ -9,6 +9,8 @@ public class Tile : MonoBehaviour
 
     Board m_board;
 
+    private AudioSource musica;
+    public AudioClip audioFX;
 
     public void Init(int cambioX, int cambioY, Board board)
     {
@@ -31,6 +33,7 @@ public class Tile : MonoBehaviour
     public void OnMouseUp()
     {
         m_board.ReleaseTile();
+        AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
     }
 
 }
