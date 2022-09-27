@@ -6,11 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class Puntaje : MonoBehaviour
 {
+    //Variables usadas en este script
     private int puntos;
 
     private int multiplicador;
 
     private int puntajeAlmacenado;
+
+    public int puntajeNecesario;    
 
     private TextMeshProUGUI TextMesh;
     public bool pasoNivel_1 = true;
@@ -19,47 +22,28 @@ public class Puntaje : MonoBehaviour
     public bool pasoNivel_4;
     public bool pasoNivel_5;
 
-
+    //Va a mostrar en el canva la cantidad de puntos que obtenga el jugador
     private void Start()
     {
         TextMesh = GetComponent<TextMeshProUGUI>();
     }
 
+    //Reiniciará la puntuación cada vez que el jugador juegue cada nivel
     private void Update()
     {
 
         TextMesh.text = puntos.ToString("0");
     }
 
+    //Aquí el jugador va a pasar de nivel por la puntuación que este obtenga
     public void SumatoriaPuntos(int puntosEntrada)
     {
         puntos += puntosEntrada;
 
-        if (puntos > 300 && puntos <= 350)
-        {
-          SceneManager.LoadScene("Nivel2");
-            pasoNivel_2 = true;
-
-        }
-        else if (puntos > 400 && puntos <= 450)
-        {
-          SceneManager.LoadScene("Nivel3");
-          pasoNivel_3 = true;
-        }
-        else if (puntos > 500 && puntos <= 550)
-        {
-          SceneManager.LoadScene("Nivel4");
-            pasoNivel_4 = true;
-        }
-        else if (puntos > 600 && puntos <= 650)
-        {
-          SceneManager.LoadScene("Nivel5");
-            pasoNivel_5 = true;
-        }
-       /* else
+        if(puntos >= puntajeNecesario)
         {
             SceneManager.LoadScene("Win");
-        }*/
+        }
     }
  
 

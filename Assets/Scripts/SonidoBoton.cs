@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SonidoBoton : MonoBehaviour
 {
+    //Variables usadas en este script
 
     public AudioSource source;
     public AudioClip clip;
@@ -14,6 +15,7 @@ public class SonidoBoton : MonoBehaviour
         source.clip = clip;
     }
 
+    //Reproduce el sonido de las fichas
     public void Reproducir()
     {
         source.Play();

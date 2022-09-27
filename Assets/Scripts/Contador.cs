@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class Contador : MonoBehaviour
 {
+    //Estas son las variables que se usaron en este script
+
     public int minutos;
     public int segundos;
     public TMP_Text tiempo;
@@ -18,6 +20,7 @@ public class Contador : MonoBehaviour
         restantes = (minutos * 60) + segundos;
     }
 
+    //Si el contador del tiempo llega a "0", se irá automáticamente a la escena del Game Over
     private void Update()
     {
         if (enMarcha)

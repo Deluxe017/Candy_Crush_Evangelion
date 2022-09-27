@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GamePiece : MonoBehaviour
 {
+    //Estas son las variables que se usaron en este script
+
     public int xIndex;
     public int yIndex;
 
@@ -13,19 +15,22 @@ public class GamePiece : MonoBehaviour
 
     public TipoInterpolacion tipoDeInterpolo;
     public TipoFicha tipoFicha;
+    
 
-
+    //Aquí el jugador va a seleccionar la cantidad de fichas que quiere en X y Y 
     internal void SetCoord(int x, int y)
     {
         xIndex = x;
         yIndex = y;
     }
 
+    //El board
     internal void Init(Board board)
     {
         m_board = board;
     }
 
+    //Los tipos de movimiento elegibles que las fichas van a tener
     internal void Move(int x, int y, float moveTime)
     {
         if (!m_isMoving)
@@ -34,7 +39,7 @@ public class GamePiece : MonoBehaviour
         }
     }
 
-
+    //Revisará si las fichas están en movimiento
     IEnumerator MoveRoutine(int destX, int destY, float timeToMove)
     {
         Vector2 startPosition = transform.position;
@@ -96,6 +101,7 @@ public class GamePiece : MonoBehaviour
         m_isMoving = false;
     }
 
+    //Tipos de movimiento elegibles para el movimiento de las fichas
     public enum TipoInterpolacion
     {
         Lineal,
@@ -105,6 +111,7 @@ public class GamePiece : MonoBehaviour
         MasSuavizado,
     }
 
+    //Los nombres de los diferentes tipos de fichas que hay en el juego
     public enum TipoFicha
     {
         Asuka,

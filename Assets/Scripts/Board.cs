@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 public class Board : MonoBehaviour
 {
+    //Variables usadas
+
     public int alto;
     public int ancho;
 
@@ -28,6 +32,9 @@ public class Board : MonoBehaviour
 
     bool m_playerInputEnabled = true;
 
+    public int cantidadMovimientos;
+    public TextMeshProUGUI moves;
+
     Transform tileParent;
     Transform gamePieceParent;
 
@@ -38,9 +45,12 @@ public class Board : MonoBehaviour
     public AudioClip musica;
     public AudioClip audioFX;
 
+    //Se calcula el ancho y el alto del board, la cámara se acomoda automáticamente con la resolución de aspecto del juego
     private void Start()
     {
         SetParents();
+
+        moves.text = "Movimientos: " + cantidadMovimientos.ToString();
 
         m_allTiles = new Tile[alto, ancho];
         m_allGamePieces = new GamePiece[alto, ancho];
@@ -67,6 +77,7 @@ public class Board : MonoBehaviour
         }
     }
 
+    //La cámara se acomoda con la resolución de aspecto
     private void SetupCamera()
     {
         Camera.main.transform.position = new Vector3((float)(alto - 1) / 2f, (float)(ancho - 1) / 2f, -10f);
@@ -77,6 +88,8 @@ public class Board : MonoBehaviour
         Camera.main.orthographicSize = verticalSize > horizontalSize ? verticalSize : horizontalSize;
     }
 
+
+    //Se instancian las ubicaciones de las fichas
     private void SetupTiles()
     {
         for (int i = 0; i < alto; i++)
@@ -102,7 +115,7 @@ public class Board : MonoBehaviour
 
     }
 
-
+    //Agrega aleatoriamente fichas al Board
     private void FillBoard(int falseOffset = 0, float moveTime = .1f)
     {
         List<GamePiece> addedPieces = new List<GamePiece>();
@@ -128,11 +141,14 @@ public class Board : MonoBehaviour
 
             }
         }
+        //Interacciones máximas
         int maxIterations = 20;
+        //Números de interacciones
         int iterations = 0;
 
         bool isFilled = false;
 
+        //Si se encuentra algún match, las fichas de destruirán
         while (!isFilled)
         {
             List<GamePiece> matches = FindAllMatches();
@@ -174,6 +190,7 @@ public class Board : MonoBehaviour
         }
     }
 
+    //Cambiará de posición la pieza inicial con la pieza final
     public void DragToTile(Tile tile)
     {
         if (piezaInicial != null && IsNextTo(tile, piezaInicial))
@@ -197,6 +214,7 @@ public class Board : MonoBehaviour
         StartCoroutine(SwitchTilesRoutine(m_clickedTile, m_targetTile));
     }
 
+    //Encontrará los matches en coordenadas X y Y
     IEnumerator SwitchTilesRoutine(Tile clickedTile, Tile targetTile)
     {
         if (m_playerInputEnabled)
@@ -230,12 +248,16 @@ public class Board : MonoBehaviour
                     CleatAndRefillBoard(clickedPieceMatches.Union(targetPieceMatches).ToList());
                     AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
                 }
-
+                cantidadMovimientos--;
+                moves.text = "Movimientos: " + cantidadMovimientos.ToString();
 
 
             }
         }
-
+        if(cantidadMovimientos <= 0)
+        {
+            SceneManager.LoadScene("Game Over");
+        }
 
 
     }
@@ -312,6 +334,7 @@ public class Board : MonoBehaviour
         }
     }
 
+    //Se encuentra los matches verticalmente
     List<GamePiece> FindVerticalMatches(int startX, int startY, int minLenght = 3)
     {
         List<GamePiece> upwardMatches = FindMatches(startX, startY, Vector2.up, 2);
@@ -330,6 +353,7 @@ public class Board : MonoBehaviour
         return combinedMatches.Count >= minLenght ? combinedMatches : null;
     }
 
+    //Se encuentra los matches horizontalmente
     List<GamePiece> FindHorizontalMatches(int startX, int startY, int minLenght = 3)
     {
         List<GamePiece> rightMatches = FindMatches(startX, startY, Vector2.right, 2);
@@ -348,6 +372,7 @@ public class Board : MonoBehaviour
         return combinedMatches.Count >= minLenght ? combinedMatches : null;
     }
 
+    //Se encuentra los matches, ya sea horizontal y verticalmente
     private List<GamePiece> FindMatchesAt(int x, int y, int minLenght = 3)
     {
         List<GamePiece> horizontalMatches = FindHorizontalMatches(x, y, minLenght);
@@ -356,20 +381,21 @@ public class Board : MonoBehaviour
         if (horizontalMatches == null)
         {
             horizontalMatches = new List<GamePiece>();
-            Figure(x, y, minLenght);
-           
+
+
         }
         if (verticalMatches == null)
         {
             verticalMatches = new List<GamePiece>();
-            Figure(x, y, minLenght);
+
         }
+        var MatchesCombinados = horizontalMatches.Union(verticalMatches).ToList();
         if(horizontalMatches.Count != 0 && verticalMatches.Count != 0)
         {
             int cantidadPuntos = 1000;
 
             m_puntaje.SumatoriaPuntos(cantidadPuntos);
-            Debug.Log("Figura");
+
         }
 
         var combinedMatches = horizontalMatches.Union(verticalMatches).ToList();
@@ -424,6 +450,7 @@ public class Board : MonoBehaviour
         return matches;
     }
 
+    //Revisa las fichas que estén al lado de cada una
     private bool IsNextTo(Tile start, Tile end)
     {
         if (Mathf.Abs(start.xIndex - end.xIndex) == 1 && start.yIndex == end.yIndex)
@@ -440,6 +467,7 @@ public class Board : MonoBehaviour
         return false;
     }
 
+    //Se encuentran todos los matches
     private List<GamePiece> FindAllMatches()
     {
         List<GamePiece> combinedMatches = new List<GamePiece>();
@@ -456,13 +484,14 @@ public class Board : MonoBehaviour
         return combinedMatches;
     }
 
+    //Se cambia el color del Tile cuando se encuentran los matches
     void HighlightTileOff(int x, int y)
     {
         SpriteRenderer spriteRender = m_allTiles[x, y].GetComponent<SpriteRenderer>();
         spriteRender.color = new Color(spriteRender.color.r, spriteRender.color.g, spriteRender.color.b, 0);
     }
 
-
+    //Se cambia el color del Tile cuando se encuentran los matches
     void HighlightTileOn(int x, int y, Color col)
     {
         SpriteRenderer spriteRenderer = m_allTiles[x, y].GetComponent<SpriteRenderer>();
@@ -543,6 +572,7 @@ public class Board : MonoBehaviour
         }
     }
 
+    //Se obtienen las fichas de manera aleatoria
     GameObject GetRandomPiece()
     {
         int randomInx = Random.Range(0, gamePiecesPrefabs.Length);
@@ -579,6 +609,7 @@ public class Board : MonoBehaviour
         return (x >= 0 && x < alto && y >= 0 && y < ancho);
     }
 
+    //No permite cambiar de posición las fichas del mismo tipo
     GamePiece FillRandomAt(int x, int y, int falseOffset = 0, float moveTime = .1f)
     {
         GamePiece randomPiece = Instantiate(GetRandomPiece(), Vector2.zero, Quaternion.identity).GetComponent<GamePiece>();
@@ -600,6 +631,7 @@ public class Board : MonoBehaviour
         return randomPiece;
     }
 
+    //Reemplaza las fichas de manera aleatoria
     void ReplaceWithRandom(List<GamePiece> gamePieces, int falseOffset = 0, float moveTime = .1f)
     {
         foreach (GamePiece piece in gamePieces)
@@ -623,7 +655,7 @@ public class Board : MonoBehaviour
 
 
 
-
+    //Para organizar las fichas que van a caer de manera random
     List<GamePiece> CollapseColumn(int column, float collapseTime = .1f)
     {
         List<GamePiece> movingPieces = new List<GamePiece>();
@@ -657,6 +689,7 @@ public class Board : MonoBehaviour
         return movingPieces;
     }
 
+    //Colapsa las columnas de manera ordenada
     List<GamePiece> CollapseColumn(List<GamePiece> gamePieces)
     {
         List<GamePiece> movingPieces = new List<GamePiece>();
@@ -670,6 +703,7 @@ public class Board : MonoBehaviour
         return movingPieces;
     }
 
+    //Obtiene las columnas random
     private List<int> GetColumns(List<GamePiece> gamePieces)
     {
         List<int> columns = new List<int>();
@@ -693,7 +727,7 @@ public class Board : MonoBehaviour
 
         do
         {
-            //esta es la parte donde se activa la animacion al hacer match manual//
+            //Se activa la animación al hacer match manual
             foreach (GamePiece piece in matches)
             {
 
@@ -740,6 +774,7 @@ public class Board : MonoBehaviour
         m_playerInputEnabled = true;
     }
 
+    //Límpia y colapsa las fichas
     IEnumerator ClearAndCollapseRoutine(List<GamePiece> gamePieces)
     {
         myCount++;
@@ -761,6 +796,7 @@ public class Board : MonoBehaviour
                 yield return null;
             }
 
+            //Sonido cuando las fichas hacen match
             AudioSource.PlayClipAtPoint(audioFX, gameObject.transform.position);
 
             yield return new WaitForSeconds(.5f);
@@ -775,7 +811,7 @@ public class Board : MonoBehaviour
             else
             {
 
-                //para que se active la animacion cuando se hace un match naturalmente al caer//
+                //Activa la animacion cuando se hace un match al caer
                 foreach (GamePiece piece in matches)
                 {
 
@@ -824,6 +860,7 @@ public class Board : MonoBehaviour
         yield return null;
     }
 
+    //Velocidad para que las fichas cambien de lugars
     public bool IsCollapsed(List<GamePiece> gamePieces)
     {
         foreach (GamePiece piece in gamePieces)

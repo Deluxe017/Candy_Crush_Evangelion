@@ -16,6 +16,7 @@ public class Escena : MonoBehaviour
         
     }
 
+    //Aquí se nombra y se llama cada escena que se tuvo que usar en este juego
     public void Juego()
     {
         SceneManager.LoadScene("Juego");
